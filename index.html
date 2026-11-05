@@ -3,14 +3,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>USDT Transfer Interface</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0d16">
+<title>USDT Transfer Demo</title>
 
 <style>
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -18,46 +20,52 @@ body {
   color: #fff;
   font-family: Arial, sans-serif;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .app {
   width: 100%;
-  max-width: 760px;
+  max-width: 480px;
   min-height: 100vh;
+  min-height: 100dvh;
   margin: auto;
-  padding: 7px 38px 35px;
+  padding: max(12px, env(safe-area-inset-top)) 20px
+           max(22px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
 }
 
 .to-box {
   border-top: 1px solid #252838;
   border-bottom: 1px solid #252838;
-  padding: 24px 30px;
-  font-size: 20px;
-  line-height: 1.5;
+  padding: 18px 5px;
+  font-size: 15px;
+  line-height: 1.6;
   overflow-wrap: anywhere;
 }
 
 .to-box span {
   color: #929db5;
-  margin-right: 8px;
+  margin-right: 6px;
 }
 
 .to-box strong {
-  font-size: 19px;
+  font-size: 14px;
   font-weight: 600;
 }
 
 .amount-area {
   text-align: center;
-  padding-top: 65px;
+  padding-top: clamp(45px, 10vh, 85px);
 }
 
 .amount {
   color: #fff;
-  font-size: 82px;
+  font-size: clamp(52px, 15vw, 76px);
   font-weight: 600;
-  min-height: 100px;
+  min-height: 90px;
   overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .amount.zero {
@@ -66,31 +74,33 @@ body {
 
 .usd {
   color: #929bb3;
-  font-size: 21px;
+  font-size: 17px;
   margin-top: 5px;
 }
 
 .token-row {
   display: flex;
   align-items: center;
-  margin-top: 72px;
-  gap: 18px;
+  margin-top: auto;
+  padding-top: 40px;
+  gap: 13px;
 }
 
 .token-icon {
-  width: 60px;
-  height: 60px;
+  width: 49px;
+  height: 49px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: #26a17b;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 38px;
+  font-size: 31px;
   font-weight: bold;
 }
 
 .token-name {
-  font-size: 21px;
+  font-size: 19px;
   font-weight: bold;
 }
 
@@ -98,19 +108,21 @@ body {
   margin-left: auto;
   background: #1b1b2d;
   color: white;
-  border: 2px solid #30304e;
+  border: 1px solid #30304e;
   border-radius: 40px;
-  padding: 13px 32px;
-  font-size: 20px;
+  padding: 10px 24px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .keypad {
-  margin-top: 28px;
+  margin-top: 18px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(4, 102px);
+  grid-template-rows: repeat(4, minmax(57px, 8vh));
+  gap: 3px;
   text-align: center;
 }
 
@@ -118,9 +130,10 @@ body {
   background: transparent;
   border: none;
   color: white;
-  font-size: 39px;
+  font-size: clamp(25px, 8vw, 34px);
   cursor: pointer;
-  border-radius: 15px;
+  border-radius: 12px;
+  touch-action: manipulation;
 }
 
 .key:active {
@@ -128,16 +141,18 @@ body {
 }
 
 .review {
-  margin-top: 24px;
+  margin-top: 13px;
   width: 100%;
-  height: 80px;
+  height: 59px;
+  flex-shrink: 0;
   border: none;
   border-radius: 60px;
   background: #1c1b2e;
   color: #fff;
-  font-size: 22px;
+  font-size: 19px;
   font-weight: bold;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .review:disabled {
@@ -147,20 +162,21 @@ body {
 
 .demo-note {
   text-align: center;
-  font-size: 11px;
+  font-size: 10px;
   color: #777f98;
-  margin-top: 18px;
+  margin-top: 13px;
 }
 
 .summary {
   display: none;
-  margin-top: 20px;
+  margin-top: 18px;
   background: #171a29;
   border: 1px solid #343850;
-  padding: 20px;
+  padding: 18px;
   border-radius: 16px;
-  line-height: 2;
+  line-height: 1.9;
   overflow-wrap: anywhere;
+  font-size: 14px;
 }
 
 .summary button {
@@ -175,34 +191,26 @@ body {
   cursor: pointer;
 }
 
-@media(max-width:480px) {
-  .app {
-    padding: 7px 20px 25px;
-  }
-
-  .to-box {
-    padding: 20px 5px;
-    font-size: 16px;
-  }
-
-  .to-box strong {
-    font-size: 15px;
-  }
-
+@media (max-height: 680px) {
   .amount-area {
-    padding-top: 55px;
-  }
-
-  .amount {
-    font-size: 70px;
+    padding-top: 25px;
   }
 
   .token-row {
-    margin-top: 65px;
+    padding-top: 20px;
   }
 
   .keypad {
-    grid-template-rows: repeat(4, 102px);
+    grid-template-rows: repeat(4, 55px);
+  }
+}
+
+@media (min-width: 481px) {
+  .app {
+    border-left: 1px solid #171a29;
+    border-right: 1px solid #171a29;
+    padding-left: 30px;
+    padding-right: 30px;
   }
 }
 </style>
@@ -220,29 +228,17 @@ body {
   </div>
 
   <div class="amount-area">
-
     <div class="amount zero" id="amount">0</div>
-
-    <div class="usd" id="usd">
-      ≈ $0.00 ↑↓
-    </div>
-
+    <div class="usd" id="usd">≈ $0.00 USD</div>
   </div>
 
   <div class="token-row">
-
     <div class="token-icon">₮</div>
-
     <div class="token-name">USDT</div>
-
-    <button class="max-btn" onclick="maxAmount()">
-      Max
-    </button>
-
+    <button class="max-btn" onclick="maxAmount()">Max</button>
   </div>
 
   <div class="keypad">
-
     <button class="key" onclick="press('1')">1</button>
     <button class="key" onclick="press('2')">2</button>
     <button class="key" onclick="press('3')">3</button>
@@ -258,10 +254,10 @@ body {
     <button class="key" onclick="press('.')">.</button>
     <button class="key" onclick="press('0')">0</button>
     <button class="key" onclick="removeLast()">⌫</button>
-
   </div>
 
-  <button class="review" id="review" onclick="reviewAmount()" disabled>
+  <button class="review" id="review"
+    onclick="reviewAmount()" disabled>
     Review
   </button>
 
@@ -272,40 +268,33 @@ body {
   </div>
 
   <div class="demo-note">
-    DEMO ONLY · No wallet connection or real transfer
+    DEMO ONLY · No real transfer or wallet approval
   </div>
 
 </div>
 
 <script>
-
 let amount = "";
 
 function updateDisplay() {
-
   const display = document.getElementById("amount");
   const usd = document.getElementById("usd");
   const review = document.getElementById("review");
 
   display.textContent = amount || "0";
-
   display.classList.toggle("zero", !amount);
 
   const value = Number(amount || 0);
+  usd.textContent = "≈ $" + value.toFixed(2) + " USD";
 
-  usd.textContent =
-    "≈ $" + value.toFixed(2) + " ↑↓";
-
-  review.disabled = value <= 0;
+  review.disabled = !Number.isFinite(value) || value <= 0;
 }
 
 function press(number) {
+  if (number === "." && amount.includes(".")) return;
+  if (amount.length >= 12) return;
 
-  if(number === "." && amount.includes(".")) return;
-
-  if(amount.length >= 12) return;
-
-  if(amount === "0" && number !== ".") {
+  if (amount === "0" && number !== ".") {
     amount = number;
   } else {
     amount += number;
@@ -315,42 +304,31 @@ function press(number) {
 }
 
 function removeLast() {
-
   amount = amount.slice(0, -1);
-
   updateDisplay();
 }
 
 function maxAmount() {
-
-  alert(
-    "Demo mode: Wallet balance is not connected. Maximum balance is unavailable."
-  );
-
+  alert("Demo mode: Wallet balance is not connected.");
 }
 
 function reviewAmount() {
-
-  if(Number(amount) <= 0) return;
+  if (Number(amount) <= 0) return;
 
   document.getElementById("summaryDetails").innerHTML =
     "Recipient: 0x2cCdf7C96AdA16e8e078B249FAE270A4460c2f44<br>" +
     "Token: USDT<br>" +
-    "Demo amount: " + amount + " USDT<br>" +
-    "<br>No blockchain transaction will be submitted.";
+    "Demo amount: " + amount + " USDT<br><br>" +
+    "No blockchain transaction will be submitted.";
 
   document.getElementById("summary").style.display = "block";
-
 }
 
 function closeSummary() {
-
   document.getElementById("summary").style.display = "none";
-
 }
 
 updateDisplay();
-
 </script>
 
 </body>
