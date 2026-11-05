@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEP20 Smart Contract Scanner</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: #050609;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 450px;
+  padding: 30px 22px;
+  border-radius: 22px;
+  background: linear-gradient(145deg,#111827,#080b13);
+  border: 1px solid #29344b;
+  box-shadow: 0 0 40px #006eff22;
+}
+
+.logo {
+  width: 75px;
+  height: 75px;
+  margin: auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 35px;
+  background: linear-gradient(135deg,#f00035,#075dff);
+  box-shadow: 0 0 25px #e9004544;
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #8998b0;
+  font-size: 13px;
+  margin: 10px 0 25px;
+}
+
+.tag {
+  text-align: center;
+  color: #40e8a0;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 22px;
+}
+
+.section-title {
+  color: #91a2bd;
+  font-size: 12px;
+  margin-bottom: 9px;
+}
+
+.address {
+  padding: 14px;
+  background: #080d18;
+  border: 1px solid #273651;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #53a7ff;
+  overflow-wrap: anywhere;
+  margin-bottom: 18px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(90deg,#ed0038,#075fff);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.info {
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #090e1a;
+  border: 1px solid #26334b;
+  font-size: 13px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.muted {
+  color: #8291a9;
+}
+
+.green {
+  color: #40e8a0;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 11px;
+  color: #697990;
+  line-height: 1.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <div class="logo">🔗</div>
+
+  <h1>BEP20 SCANNER</h1>
+
+  <p class="subtitle">
+    Smart Contract Information Portal
+  </p>
+
+  <div class="tag">● BNB SMART CHAIN</div>
+
+  <div class="section-title">
+    CONTRACT ADDRESS
+  </div>
+
+  <div class="address" id="address">
+    0x2cCdf7C96AdA16e8e078B249FAE270A4460c2f44
+  </div>
+
+  <button id="scanBtn" onclick="scanContract()">
+    SCAN CONTRACT
+  </button>
+
+  <div class="info" id="result">
+    <span class="muted">Network:</span> BNB Smart Chain<br>
+    <span class="muted">Chain ID:</span> 56<br>
+    <span class="muted">Status:</span> Waiting for scan
+  </div>
+
+  <div class="footer">
+    Public blockchain information only.<br>
+    No automatic wallet approvals or token transfers.
+  </div>
+
+</div>
+
+<script>
+const CONTRACT =
+"0x2cCdf7C96AdA16e8e078B249FAE270A4460c2f44";
+
+async function scanContract() {
+
+  const btn = document.getElementById("scanBtn");
+  const result = document.getElementById("result");
+
+  btn.disabled = true;
+  btn.innerText = "SCANNING...";
+
+  result.innerHTML = "Checking public blockchain data...";
+
+  try {
+
+    const response = await fetch(
+      "https://bsc-dataseed.bnbchain.org/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          method: "eth_getCode",
+          params: [CONTRACT, "latest"],
+          id: 1
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("RPC request failed");
+    }
+
+    const data = await response.json();
+
+    if (data.error) {
+      throw new Error(data.error.message);
+    }
+
+    const code = data.result;
+
+    if (!code || code === "0x") {
+      result.innerHTML =
+        '<span style="color:#ff7188">No contract code found at this address on BNB Smart Chain.</span>';
+    } else {
+
+      result.innerHTML = `
+        <span class="green">● Contract code found</span><br>
+        <span class="muted">Network:</span> BNB Smart Chain<br>
+        <span class="muted">Chain ID:</span> 56<br>
+        <span class="muted">Address:</span> ${CONTRACT}<br>
+        <span class="muted">Bytecode size:</span>
+        ${(code.length - 2) / 2} bytes<br>
+        <span class="muted">Status:</span> Deployed code detected
+        <br><br>
+        <a
+          href="https://bscscan.com/address/${CONTRACT}"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color:#55aaff"
+        >View on BscScan ↗</a>
+      `;
+    }
+
+  } catch (error) {
+
+    result.innerHTML =
+      '<span style="color:#ff7188">Scan error: ' +
+      escapeHTML(error.message) + '</span>';
+
+  } finally {
+
+    btn.disabled = false;
+    btn.innerText = "SCAN CONTRACT";
+
+  }
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[c]);
+}
+</script>
+
+</body>
+</html>
