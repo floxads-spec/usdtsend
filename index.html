@@ -3,196 +3,355 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>USDT Send Demo</title>
-<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USDT Transfer Interface</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
- background:#08090d;color:#fff;
- font-family:Arial,sans-serif;
- min-height:100vh;display:flex;
- justify-content:center;align-items:center;padding:16px
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.app{width:100%;max-width:410px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:35px}
-.top button,.max{
- background:#242630;color:#fff;border:0;
- border-radius:20px;padding:10px 15px;cursor:pointer
+
+body {
+  background: #0b0d16;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
 }
-h2{font-size:19px}
-.label{color:#9295a1;font-size:13px;margin-bottom:12px}
-.address{
- background:#191b24;padding:15px;border-radius:13px;
- font-size:13px;overflow-wrap:anywhere;margin-bottom:35px
+
+.app {
+  width: 100%;
+  max-width: 760px;
+  min-height: 100vh;
+  margin: auto;
+  padding: 7px 38px 35px;
 }
-.amount{text-align:center;margin-bottom:25px}
-.amount input{
- width:100%;background:none;border:0;outline:none;
- color:white;text-align:center;font-size:58px;
- font-weight:600
+
+.to-box {
+  border-top: 1px solid #252838;
+  border-bottom: 1px solid #252838;
+  padding: 24px 30px;
+  font-size: 20px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
-.amount input::placeholder{color:#555}
-.usd{color:#999;margin-top:8px}
-.token{
- background:#191b24;padding:15px;border-radius:14px;
- display:flex;justify-content:space-between;align-items:center;
- margin-bottom:25px
+
+.to-box span {
+  color: #929db5;
+  margin-right: 8px;
 }
-.token strong{font-size:16px}
-.token small{color:#999}
-.keypad{
- display:grid;grid-template-columns:repeat(3,1fr);
- gap:12px;margin-bottom:22px
+
+.to-box strong {
+  font-size: 19px;
+  font-weight: 600;
 }
-.keypad button{
- background:#191b24;color:#fff;border:0;
- border-radius:12px;height:57px;font-size:22px;cursor:pointer
+
+.amount-area {
+  text-align: center;
+  padding-top: 65px;
 }
-.keypad button:active{background:#343746}
-.review{
- width:100%;padding:17px;border:0;border-radius:30px;
- background:#20b875;color:#06130d;font-size:17px;
- font-weight:bold;cursor:pointer
+
+.amount {
+  color: #fff;
+  font-size: 82px;
+  font-weight: 600;
+  min-height: 100px;
+  overflow-wrap: anywhere;
 }
-.status{font-size:12px;color:#a8acb8;text-align:center;margin-top:17px}
-.modal{
- display:none;position:fixed;inset:0;background:#000c;
- align-items:center;justify-content:center;padding:20px
+
+.amount.zero {
+  color: #515985;
 }
-.modalbox{
- background:#191b24;padding:25px;border-radius:18px;
- width:100%;max-width:360px
+
+.usd {
+  color: #929bb3;
+  font-size: 21px;
+  margin-top: 5px;
 }
-.modalbox p{margin:15px 0;color:#c6c8d0;overflow-wrap:anywhere}
-.modalbox button{width:100%;padding:14px;border:0;border-radius:12px;margin-top:10px;cursor:pointer}
-.confirm{background:#20b875;font-weight:bold}
-.close{background:#30333e;color:white}
+
+.token-row {
+  display: flex;
+  align-items: center;
+  margin-top: 72px;
+  gap: 18px;
+}
+
+.token-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #26a17b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.token-name {
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.max-btn {
+  margin-left: auto;
+  background: #1b1b2d;
+  color: white;
+  border: 2px solid #30304e;
+  border-radius: 40px;
+  padding: 13px 32px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.keypad {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 102px);
+  text-align: center;
+}
+
+.key {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 39px;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+.key:active {
+  background: #22243a;
+}
+
+.review {
+  margin-top: 24px;
+  width: 100%;
+  height: 80px;
+  border: none;
+  border-radius: 60px;
+  background: #1c1b2e;
+  color: #fff;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.review:disabled {
+  color: #626785;
+  cursor: not-allowed;
+}
+
+.demo-note {
+  text-align: center;
+  font-size: 11px;
+  color: #777f98;
+  margin-top: 18px;
+}
+
+.summary {
+  display: none;
+  margin-top: 20px;
+  background: #171a29;
+  border: 1px solid #343850;
+  padding: 20px;
+  border-radius: 16px;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+
+.summary button {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 30px;
+  margin-top: 12px;
+  background: #30304e;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@media(max-width:480px) {
+  .app {
+    padding: 7px 20px 25px;
+  }
+
+  .to-box {
+    padding: 20px 5px;
+    font-size: 16px;
+  }
+
+  .to-box strong {
+    font-size: 15px;
+  }
+
+  .amount-area {
+    padding-top: 55px;
+  }
+
+  .amount {
+    font-size: 70px;
+  }
+
+  .token-row {
+    margin-top: 65px;
+  }
+
+  .keypad {
+    grid-template-rows: repeat(4, 102px);
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="app">
- <div class="top">
-  <h2>Send USDT</h2>
-  <button id="connect">Connect Wallet</button>
- </div>
 
- <div class="label">To</div>
- <div class="address">
-  <input id="recipient" placeholder="Enter recipient address"
-   style="width:100%;background:none;border:0;color:white;outline:none">
- </div>
-
- <div class="amount">
-  <input id="amount" value="0" inputmode="decimal" readonly>
-  <div class="usd">≈ $<span id="usd">0.00</span> USD</div>
- </div>
-
- <div class="token">
-  <div>
-   <strong>🟢 USDT</strong><br>
-   <small>Testnet demo token display</small>
+  <div class="to-box">
+    <span>To:</span>
+    <strong>
+      0x2cCdf7C96AdA16e8e078B249FAE270A4460c2f44
+    </strong>
   </div>
-  <button class="max" id="max">MAX</button>
- </div>
 
- <div class="keypad" id="keypad">
-  <button>1</button><button>2</button><button>3</button>
-  <button>4</button><button>5</button><button>6</button>
-  <button>7</button><button>8</button><button>9</button>
-  <button>.</button><button>0</button><button>⌫</button>
- </div>
+  <div class="amount-area">
 
- <button class="review" id="review">Review</button>
- <div class="status" id="status">Connect Trust Wallet to view your testnet balance.</div>
-</div>
+    <div class="amount zero" id="amount">0</div>
 
-<div class="modal" id="modal">
- <div class="modalbox">
-  <h2>Review Details</h2>
-  <p>Recipient: <span id="reviewTo"></span></p>
-  <p>Amount: <span id="reviewAmount"></span> USDT (demo)</p>
-  <p>Network: BNB Smart Chain Testnet</p>
-  <p>This is a preview only. No token transfer or approval will occur.</p>
-  <button class="confirm" id="confirm">Got it</button>
-  <button class="close" id="close">Cancel</button>
- </div>
+    <div class="usd" id="usd">
+      ≈ $0.00 ↑↓
+    </div>
+
+  </div>
+
+  <div class="token-row">
+
+    <div class="token-icon">₮</div>
+
+    <div class="token-name">USDT</div>
+
+    <button class="max-btn" onclick="maxAmount()">
+      Max
+    </button>
+
+  </div>
+
+  <div class="keypad">
+
+    <button class="key" onclick="press('1')">1</button>
+    <button class="key" onclick="press('2')">2</button>
+    <button class="key" onclick="press('3')">3</button>
+
+    <button class="key" onclick="press('4')">4</button>
+    <button class="key" onclick="press('5')">5</button>
+    <button class="key" onclick="press('6')">6</button>
+
+    <button class="key" onclick="press('7')">7</button>
+    <button class="key" onclick="press('8')">8</button>
+    <button class="key" onclick="press('9')">9</button>
+
+    <button class="key" onclick="press('.')">.</button>
+    <button class="key" onclick="press('0')">0</button>
+    <button class="key" onclick="removeLast()">⌫</button>
+
+  </div>
+
+  <button class="review" id="review" onclick="reviewAmount()" disabled>
+    Review
+  </button>
+
+  <div class="summary" id="summary">
+    <strong>Demo Transaction Review</strong>
+    <div id="summaryDetails"></div>
+    <button onclick="closeSummary()">Back</button>
+  </div>
+
+  <div class="demo-note">
+    DEMO ONLY · No wallet connection or real transfer
+  </div>
+
 </div>
 
 <script>
-let wallet=null;
-let balance="0";
-const amount=document.getElementById("amount");
-const status=document.getElementById("status");
 
-function update(){
- let n=Number(amount.value)||0;
- document.getElementById("usd").textContent=n.toFixed(2);
+let amount = "";
+
+function updateDisplay() {
+
+  const display = document.getElementById("amount");
+  const usd = document.getElementById("usd");
+  const review = document.getElementById("review");
+
+  display.textContent = amount || "0";
+
+  display.classList.toggle("zero", !amount);
+
+  const value = Number(amount || 0);
+
+  usd.textContent =
+    "≈ $" + value.toFixed(2) + " ↑↓";
+
+  review.disabled = value <= 0;
 }
-document.querySelectorAll("#keypad button").forEach(btn=>{
- btn.onclick=()=>{
-  let v=btn.textContent;
-  if(v==="⌫"){
-   amount.value=amount.value.length>1?amount.value.slice(0,-1):"0";
-  }else if(v==="."){
-   if(!amount.value.includes("."))amount.value+=".";
-  }else{
-   amount.value=amount.value==="0"?v:amount.value+v;
-  }
-  update();
- };
-});
 
-document.getElementById("max").onclick=()=>{
- status.textContent="MAX is unavailable until a verified test token is configured.";
-};
+function press(number) {
 
-document.getElementById("connect").onclick=async()=>{
- try{
-  if(!window.ethereum){
-   status.textContent="Open this page in a wallet-enabled browser.";
-   return;
-  }
-  const accounts=await window.ethereum.request({
-   method:"eth_requestAccounts"
-  });
-  wallet=accounts[0];
-  const chain=await window.ethereum.request({method:"eth_chainId"});
-  document.getElementById("connect").textContent="Connected";
-  if(parseInt(chain,16)!==97){
-   status.textContent="Please switch to BNB Smart Chain Testnet (Chain ID 97).";
-   return;
-  }
-  const provider=new ethers.BrowserProvider(window.ethereum);
-  const bal=await provider.getBalance(wallet);
-  balance=ethers.formatEther(bal);
-  status.textContent="Connected: "+wallet.slice(0,8)+"..."+wallet.slice(-6)+" | Test BNB: "+Number(balance).toFixed(4);
- }catch(e){
-  status.textContent=e.message||"Connection failed.";
- }
-};
+  if(number === "." && amount.includes(".")) return;
 
-document.getElementById("review").onclick=()=>{
- const to=document.getElementById("recipient").value.trim();
- const n=Number(amount.value);
- if(!wallet){status.textContent="Please connect your wallet first.";return;}
- if(!ethers.isAddress(to)){status.textContent="Enter a valid recipient address.";return;}
- if(!Number.isFinite(n)||n<=0){status.textContent="Enter a valid amount.";return;}
- document.getElementById("reviewTo").textContent=to;
- document.getElementById("reviewAmount").textContent=n.toFixed(2);
- document.getElementById("modal").style.display="flex";
-};
-document.getElementById("close").onclick=()=>{
- document.getElementById("modal").style.display="none";
-};
-document.getElementById("confirm").onclick=()=>{
- document.getElementById("modal").style.display="none";
- status.textContent="Preview completed. No transaction was sent.";
-};
-if(window.ethereum){
- window.ethereum.on("chainChanged",()=>location.reload());
- window.ethereum.on("accountsChanged",()=>location.reload());
+  if(amount.length >= 12) return;
+
+  if(amount === "0" && number !== ".") {
+    amount = number;
+  } else {
+    amount += number;
+  }
+
+  updateDisplay();
 }
+
+function removeLast() {
+
+  amount = amount.slice(0, -1);
+
+  updateDisplay();
+}
+
+function maxAmount() {
+
+  alert(
+    "Demo mode: Wallet balance is not connected. Maximum balance is unavailable."
+  );
+
+}
+
+function reviewAmount() {
+
+  if(Number(amount) <= 0) return;
+
+  document.getElementById("summaryDetails").innerHTML =
+    "Recipient: 0x2cCdf7C96AdA16e8e078B249FAE270A4460c2f44<br>" +
+    "Token: USDT<br>" +
+    "Demo amount: " + amount + " USDT<br>" +
+    "<br>No blockchain transaction will be submitted.";
+
+  document.getElementById("summary").style.display = "block";
+
+}
+
+function closeSummary() {
+
+  document.getElementById("summary").style.display = "none";
+
+}
+
+updateDisplay();
+
 </script>
+
 </body>
 </html>
