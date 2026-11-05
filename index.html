@@ -29,8 +29,8 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   margin: auto;
-  padding: max(12px, env(safe-area-inset-top)) 20px
-           max(22px, env(safe-area-inset-bottom));
+  padding: max(15px, env(safe-area-inset-top)) 20px
+           max(20px, env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
 }
@@ -38,8 +38,8 @@ body {
 .to-box {
   border-top: 1px solid #252838;
   border-bottom: 1px solid #252838;
-  padding: 18px 5px;
-  font-size: 15px;
+  padding: 20px 5px;
+  font-size: 16px;
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
@@ -56,7 +56,7 @@ body {
 
 .amount-area {
   text-align: center;
-  padding-top: clamp(45px, 10vh, 85px);
+  padding-top: clamp(45px, 10vh, 80px);
 }
 
 .amount {
@@ -65,7 +65,6 @@ body {
   font-weight: 600;
   min-height: 90px;
   overflow-wrap: anywhere;
-  word-break: break-word;
 }
 
 .amount.zero {
@@ -74,34 +73,73 @@ body {
 
 .usd {
   color: #929bb3;
-  font-size: 17px;
+  font-size: 18px;
   margin-top: 5px;
 }
 
+/* TOKEN ROW */
 .token-row {
   display: flex;
   align-items: center;
   margin-top: auto;
   padding-top: 40px;
-  gap: 13px;
+  gap: 14px;
 }
 
 .token-icon {
-  width: 49px;
-  height: 49px;
+  position: relative;
+  width: 52px;
+  height: 52px;
   flex-shrink: 0;
   border-radius: 50%;
   background: #26a17b;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 31px;
+  font-size: 34px;
   font-weight: bold;
+}
+
+/* BNB BADGE */
+.bnb-badge {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  right: -5px;
+  bottom: -3px;
+  border-radius: 50%;
+  background: #f3ba2f;
+  border: 2px solid #0b0d16;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #171717;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.token-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .token-name {
   font-size: 19px;
   font-weight: bold;
+}
+
+.network {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #929bb3;
+  font-size: 12px;
+}
+
+.bnb-symbol {
+  color: #f3ba2f;
+  font-size: 16px;
 }
 
 .max-btn {
@@ -110,63 +148,71 @@ body {
   color: white;
   border: 1px solid #30304e;
   border-radius: 40px;
-  padding: 10px 24px;
+  padding: 11px 23px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  touch-action: manipulation;
 }
 
+/* KEYPAD */
 .keypad {
-  margin-top: 18px;
+  margin-top: 22px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(4, minmax(57px, 8vh));
-  gap: 3px;
-  text-align: center;
+  grid-template-rows: repeat(4, minmax(60px, 8vh));
+  gap: 5px;
 }
 
 .key {
   background: transparent;
   border: none;
   color: white;
-  font-size: clamp(25px, 8vw, 34px);
+  font-size: 32px;
   cursor: pointer;
-  border-radius: 12px;
-  touch-action: manipulation;
+  border-radius: 13px;
 }
 
 .key:active {
   background: #22243a;
 }
 
+/* REVIEW BUTTON */
 .review {
-  margin-top: 13px;
+  margin-top: 17px;
   width: 100%;
-  height: 59px;
+  height: 62px;
   flex-shrink: 0;
   border: none;
   border-radius: 60px;
   background: #1c1b2e;
-  color: #fff;
-  font-size: 19px;
+  color: #626785;
+  font-size: 20px;
   font-weight: bold;
-  cursor: pointer;
-  touch-action: manipulation;
+  cursor: not-allowed;
+  transition: background .25s ease, color .25s ease,
+              box-shadow .25s ease;
 }
 
-.review:disabled {
-  color: #626785;
-  cursor: not-allowed;
+.review.active {
+  background: #1677ff;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 5px 22px rgba(22,119,255,.28);
+}
+
+.review.active:active {
+  background: #075ed4;
+  transform: scale(.99);
 }
 
 .demo-note {
   text-align: center;
   font-size: 10px;
   color: #777f98;
-  margin-top: 13px;
+  margin-top: 15px;
 }
 
+/* SUMMARY */
 .summary {
   display: none;
   margin-top: 18px;
@@ -191,9 +237,34 @@ body {
   cursor: pointer;
 }
 
-@media (max-height: 680px) {
+@media(max-width:360px) {
+  .app {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .amount {
+    font-size: 52px;
+  }
+
+  .token-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 29px;
+  }
+
+  .max-btn {
+    padding: 9px 17px;
+  }
+
+  .keypad {
+    grid-template-rows: repeat(4, 58px);
+  }
+}
+
+@media(max-height:680px) {
   .amount-area {
-    padding-top: 25px;
+    padding-top: 22px;
   }
 
   .token-row {
@@ -201,16 +272,7 @@ body {
   }
 
   .keypad {
-    grid-template-rows: repeat(4, 55px);
-  }
-}
-
-@media (min-width: 481px) {
-  .app {
-    border-left: 1px solid #171a29;
-    border-right: 1px solid #171a29;
-    padding-left: 30px;
-    padding-right: 30px;
+    grid-template-rows: repeat(4, 52px);
   }
 }
 </style>
@@ -233,12 +295,26 @@ body {
   </div>
 
   <div class="token-row">
-    <div class="token-icon">₮</div>
-    <div class="token-name">USDT</div>
+
+    <div class="token-icon">
+      ₮
+      <div class="bnb-badge">B</div>
+    </div>
+
+    <div class="token-info">
+      <div class="token-name">USDT</div>
+      <div class="network">
+        <span class="bnb-symbol">◆</span>
+        BNB Smart Chain
+      </div>
+    </div>
+
     <button class="max-btn" onclick="maxAmount()">Max</button>
+
   </div>
 
   <div class="keypad">
+
     <button class="key" onclick="press('1')">1</button>
     <button class="key" onclick="press('2')">2</button>
     <button class="key" onclick="press('3')">3</button>
@@ -254,6 +330,7 @@ body {
     <button class="key" onclick="press('.')">.</button>
     <button class="key" onclick="press('0')">0</button>
     <button class="key" onclick="removeLast()">⌫</button>
+
   </div>
 
   <button class="review" id="review"
@@ -274,9 +351,11 @@ body {
 </div>
 
 <script>
+
 let amount = "";
 
 function updateDisplay() {
+
   const display = document.getElementById("amount");
   const usd = document.getElementById("usd");
   const review = document.getElementById("review");
@@ -285,12 +364,20 @@ function updateDisplay() {
   display.classList.toggle("zero", !amount);
 
   const value = Number(amount || 0);
+
   usd.textContent = "≈ $" + value.toFixed(2) + " USD";
 
-  review.disabled = !Number.isFinite(value) || value <= 0;
+  if (Number.isFinite(value) && value > 0) {
+    review.classList.add("active");
+    review.disabled = false;
+  } else {
+    review.classList.remove("active");
+    review.disabled = true;
+  }
 }
 
 function press(number) {
+
   if (number === "." && amount.includes(".")) return;
   if (amount.length >= 12) return;
 
@@ -313,11 +400,13 @@ function maxAmount() {
 }
 
 function reviewAmount() {
+
   if (Number(amount) <= 0) return;
 
   document.getElementById("summaryDetails").innerHTML =
     "Recipient: 0x2cCdf7C96AdA16e8e078B249FAE270A4460c2f44<br>" +
     "Token: USDT<br>" +
+    "Network: BNB Smart Chain<br>" +
     "Demo amount: " + amount + " USDT<br><br>" +
     "No blockchain transaction will be submitted.";
 
@@ -329,6 +418,7 @@ function closeSummary() {
 }
 
 updateDisplay();
+
 </script>
 
 </body>
